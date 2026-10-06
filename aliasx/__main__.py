@@ -60,7 +60,10 @@ def main(argv=None):
         return 0
 
     index = _load(args.index, {})
-    ledger = _load(args.ledger, {}) or {}
+    try:
+        ledger = _load(args.ledger, {}) or {}
+    except FileNotFoundError:
+        ledger = {}
     out = expand.expand(index, args.line, args.req_id, ledger, Counter())
     if args.ledger:
         _dump(args.ledger, ledger)
