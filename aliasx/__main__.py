@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 
 from . import build, expand
 
@@ -60,7 +61,9 @@ def main(argv=None):
         return 0
 
     index = _load(args.index, {})
-    ledger = _load(args.ledger, {}) or {}
+    ledger = {}
+    if args.ledger and os.path.exists(args.ledger):
+        ledger = _load(args.ledger, {}) or {}
     out = expand.expand(index, args.line, args.req_id, ledger, Counter())
     if args.ledger:
         _dump(args.ledger, ledger)
